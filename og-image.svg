@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f1117"/>
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#161921"/>
+  
+  <!-- Clock icon -->
+  <g transform="translate(560,130) scale(0.625)">
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#60a5fa" stroke-width="4"/>
+    <line x1="0" y1="0" x2="0" y2="-35" stroke="#e2e4e9" stroke-width="4" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="25" y2="0" stroke="#e2e4e9" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="5" fill="#3B82F6"/>
+    <!-- Globe lines -->
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <ellipse cx="0" cy="0" rx="30" ry="60" fill="none" stroke="#3B82F6" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="-60" y1="0" x2="60" y2="0" stroke="#3B82F6" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="-55" y1="-30" x2="55" y2="-30" stroke="#3B82F6" stroke-width="0.75" stroke-dasharray="2 3"/>
+    <line x1="-55" y1="30" x2="55" y2="30" stroke="#3B82F6" stroke-width="0.75" stroke-dasharray="2 3"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="310" font-family="Inter, system-ui, sans-serif" font-size="48" font-weight="700" fill="#e2e4e9" text-anchor="middle">Uluslararası Zaman Yönetimi</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="370" font-family="Inter, system-ui, sans-serif" font-size="24" fill="#9ca3b4" text-anchor="middle">Zaman Dilimleri, UTC, IANA ve ISO 8601 Rehberi</text>
+  
+  <!-- Stats -->
+  <text x="600" y="430" font-family="Inter, system-ui, sans-serif" font-size="18" fill="#3B82F6" text-anchor="middle">11 Bölüm · 8 Görsel · ~18 dk okuma</text>
+  
+  <!-- Level badges -->
+  <rect x="390" y="460" width="80" height="26" rx="13" fill="#34d399" opacity="0.2"/>
+  <text x="430" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#34d399" text-anchor="middle">Temel</text>
+  
+  <rect x="490" y="460" width="80" height="26" rx="13" fill="#fb923c" opacity="0.2"/>
+  <text x="530" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#fb923c" text-anchor="middle">Orta</text>
+  
+  <rect x="590" y="460" width="80" height="26" rx="13" fill="#3B82F6" opacity="0.2"/>
+  <text x="630" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#3B82F6" text-anchor="middle">İleri</text>
+  
+  <rect x="690" y="460" width="80" height="26" rx="13" fill="#c76a6a" opacity="0.2"/>
+  <text x="730" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#c76a6a" text-anchor="middle">Uzman</text>
+  
+  <!-- Footer -->
+  <text x="600" y="560" font-family="Inter, system-ui, sans-serif" font-size="16" fill="#6b7280" text-anchor="middle">oxara.github.io/timezone-handbook</text>
+</svg>

@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uluslararası Zaman Yönetimi: Zaman Dilimleri ve Uygulamaları</title>
+    <meta name="description" content="Zaman dilimleri, UTC, GMT, DST, IANA veritabanı ve ISO 8601 hakkında kapsamlı Türkçe rehber.">
+    <meta name="keywords" content="zaman dilimi, timezone, UTC, GMT, DST, IANA, ISO 8601, yaz saati, leap second, Türkçe">
+    <meta name="author" content="Erdem Özkara">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://oxara.github.io/timezone-article/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Uluslararası Zaman Yönetimi: Zaman Dilimleri ve Uygulamaları">
+    <meta property="og:description" content="Zaman dilimleri, UTC, GMT, DST, IANA ve ISO 8601 hakkında kapsamlı Türkçe rehber.">
+    <meta property="og:url" content="https://oxara.github.io/timezone-article/">
+    <meta property="og:site_name" content="Oxara">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:image" content="https://oxara.github.io/timezone-article/og-image.svg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Uluslararası Zaman Yönetimi: Zaman Dilimleri ve Uygulamaları">
+    <meta name="twitter:description" content="Zaman dilimleri, UTC, GMT, DST, IANA ve ISO 8601 hakkında kapsamlı Türkçe rehber.">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Uluslararası Zaman Yönetimi: Zaman Dilimleri ve Uygulamaları",
+      "description": "Zaman dilimleri, UTC, GMT, DST, IANA veritabanı ve ISO 8601 hakkında kapsamlı Türkçe rehber.",
+      "author": {"@type": "Person", "name": "Erdem Özkara", "url": "https://github.com/Oxara"},
+      "publisher": {"@type": "Organization", "name": "Oxara"},
+      "url": "https://oxara.github.io/timezone-article/",
+      "inLanguage": "tr",
+      "datePublished": "2024-07-04",
+      "dateModified": "2026-05-31",
+      "keywords": ["timezone", "UTC", "GMT", "DST", "IANA", "ISO 8601"]
+    }
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231e3a5f'/><circle cx='16' cy='16' r='10' fill='none' stroke='%2360a5fa' stroke-width='1.5'/><line x1='16' y1='16' x2='16' y2='9' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/><line x1='16' y1='16' x2='21' y2='16' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/><circle cx='16' cy='16' r='1.5' fill='%2360a5fa'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* 60/30/10 Color System — Light Editorial
+           60% → Background (warm white/cream)
+           30% → Text & content surfaces
+           10% → Accent & interactive (brand blue) */
+        :root {
+            --bg: #f0efec;
+            --bg-elevated: #ffffff;
+            --surface: #f3f2ef;
+            --surface2: #eae8e4;
+            --text: #1a1a1a;
+            --text-secondary: #3d3d3d;
+            --text-muted: #8c8c8c;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-subtle: rgba(37, 99, 235, 0.04);
+            --orange: #c2410c;
+            --orange-subtle: rgba(194, 65, 12, 0.04);
+            --border: rgba(0, 0, 0, 0.06);
+            --border-strong: rgba(0, 0, 0, 0.1);
+            --code-bg: #f6f5f3;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-secondary);
+            line-height: 1.9;
+            font-size: 17.5px;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1;
+        }
+
+        /* Layout */
+        .article-wrapper { max-width: 820px; margin: 0 auto; padding: 4rem 4.5rem 8rem; background: var(--bg-elevated); min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.04); }
+
+        /* Header — editorial */
+        .article-header { margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-strong); }
+        .article-header h1 { font-family: var(--font-heading); font-size: 2.6rem; font-weight: 700; color: var(--text); line-height: 1.2; letter-spacing: -0.035em; margin-bottom: 1.5rem; }
+        .article-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-family: var(--font-heading); font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.01em; }
+        .article-meta .tag { background: var(--surface2); padding: 0.2em 0.6em; border-radius: 3px; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+
+        /* Headings — sans-serif contrast */
+        h2 { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700; color: var(--text); margin-top: 5rem; margin-bottom: 1.25rem; letter-spacing: -0.025em; line-height: 1.3; }
+        h3 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; color: var(--text); margin-top: 3.5rem; margin-bottom: 1rem; letter-spacing: -0.01em; }
+        h4 { font-family: var(--font-heading); font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); margin-top: 2.5rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em; }
+
+        /* Body text */
+        p { margin-bottom: 1.6rem; }
+        strong { color: var(--text); font-weight: 500; }
+        em { color: var(--text); }
+        a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(37, 99, 235, 0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        a:hover { color: var(--accent-hover); text-decoration-color: var(--accent-hover); }
+
+        /* Lead paragraph */
+        .lead { font-size: 1.15rem; line-height: 1.8; color: var(--text-secondary); font-weight: 300; margin-bottom: 2.5rem; }
+
+        /* Pull quotes — editorial style */
+        .pull-quote { margin: 3.5rem 0; padding: 2rem 2.5rem; border-left: 3px solid var(--accent); background: var(--accent-subtle); font-size: 1.12rem; font-weight: 400; font-style: italic; color: var(--text); line-height: 1.7; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+        .pull-quote em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+        /* Slogan — centerpiece motto */
+        .slogan { margin: 3rem 0; padding: 2.5rem 2rem; text-align: center; background: linear-gradient(135deg, var(--accent-subtle) 0%, rgba(37,99,235,0.08) 100%); border: 1px solid rgba(37,99,235,0.15); border-radius: var(--radius-md); }
+        .slogan .slogan-text { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; line-height: 1.3; }
+        .slogan .slogan-text .slogan-highlight { color: var(--accent); }
+        .slogan .slogan-sub { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; line-height: 1.6; }
+
+        /* Section hooks — curiosity teasers */
+        .section-hook { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-style: italic; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+
+        /* Figures */
+        figure { margin: 3rem -2rem; }
+        figure img { width: 100%; border-radius: var(--radius-md); border: 1px solid var(--border-strong); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        figcaption { text-align: center; font-family: var(--font-heading); font-size: 0.75rem; color: var(--text-muted); margin-top: 0.85rem; font-style: normal; letter-spacing: 0.01em; }
+        figure.inline { margin: 2.5rem 0; }
+        figure.inline img { border-radius: var(--radius-sm); box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+
+        /* Lists */
+        ul, ol { padding-left: 1.5rem; margin: 1.5rem 0; }
+        li { margin: 0.65rem 0; line-height: 1.85; }
+        li strong { color: var(--text); }
+        li::marker { color: var(--text-muted); }
+
+        /* Code */
+        code { background: #efecea; padding: 0.15em 0.4em; border-radius: 3px; font-size: 0.78em; font-family: var(--font-mono); color: #b33a2b; border: 1px solid var(--border); }
+        pre { background: var(--code-bg); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 1.25rem 1.5rem; overflow-x: auto; margin: 1.5rem 0 2rem; }
+        pre code { background: none; padding: 0; border: none; font-size: 0.78rem; line-height: 1.7; color: var(--text); }
+
+        /* Tables — editorial, cleaner */
+        table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-family: var(--font-heading); font-size: 0.82rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-strong); }
+        th, td { padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--surface2); color: var(--text); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        td { color: var(--text-secondary); background: var(--surface); font-size: 0.82rem; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Callouts */
+        .callout { padding: 1.5rem 1.75rem; border-radius: var(--radius-md); margin: 2.5rem 0; border-left: 3px solid; background: var(--surface); line-height: 1.75; font-size: 0.88rem; font-family: var(--font-heading); }
+        .callout-warn { border-color: var(--orange); background: var(--orange-subtle); }
+        .callout-warning { border-color: var(--orange); background: var(--orange-subtle); }
+        .callout-info { border-color: var(--accent); background: var(--accent-subtle); }
+
+        /* SVG Illustrations */
+        .svg-illustration { margin: 3rem 0; text-align: center; }
+        .svg-illustration svg { width: 100%; max-width: 620px; height: auto; border-radius: var(--radius-md); }
+        .svg-illustration.full-width svg { max-width: 100%; }
+        .svg-caption { text-align: center; font-family: var(--font-heading); font-size: 0.75rem; color: var(--text-muted); margin-top: 0.85rem; }
+
+        /* Era transitions */
+        .era-marker { display: flex; align-items: center; gap: 1rem; margin: 4rem -4.5rem 2rem; padding: 1.25rem 4.5rem; background: var(--bg); }
+        .era-marker::before, .era-marker::after { content: ''; flex: 1; height: 1px; background: var(--border-strong); }
+        .era-marker .era-badge { font-family: var(--font-heading); font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; padding: 0.3em 1em; background: var(--bg-elevated); border-radius: 20px; border: 1px solid var(--border-strong); }
+
+        /* Part divider — strong visual break between story and technical */
+        .part-divider { margin: 5rem -4.5rem 4rem; padding: 3rem 4.5rem; background: var(--surface2); border-top: 2px solid var(--border-strong); border-bottom: 2px solid var(--border-strong); text-align: center; }
+        .part-divider .part-label { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+        .part-divider .part-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .part-divider .part-desc { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* SVG Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Separators */
+        hr { border: none; text-align: center; margin: 4.5rem 0; }
+        hr::after { content: '\2022  \2022  \2022'; color: var(--text-muted); font-size: 0.7rem; letter-spacing: 0.8em; opacity: 0.6; }
+
+        /* Progress bar */
+        .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); transform-origin: left; transform: scaleX(0); z-index: 100; }
+
+        /* Back to top */
+        .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 38px; height: 38px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 50%; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.3s; opacity: 0; transform: translateY(10px); z-index: 50; font-family: var(--font-heading); }
+        .back-to-top.visible { opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { background: var(--surface2); color: var(--accent); border-color: var(--accent); }
+
+        /* Footer */
+        .article-footer { margin-top: 5rem; padding-top: 2rem; border-top: 1px solid var(--border-strong); font-family: var(--font-heading); font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.01em; }
+        .article-footer a { color: var(--accent); }
+
+        /* Skip link */
+        .skip-link { position: absolute; top: -40px; left: 1rem; background: var(--accent); color: #fff; padding: 0.5em 1em; border-radius: 4px; font-family: var(--font-heading); font-size: 0.8rem; z-index: 200; transition: top 0.2s; }
+        .skip-link:focus { top: 0.5rem; text-decoration: none; color: #fff; }
+
+        /* Responsive */
+        @media (max-width: 800px) { .article-wrapper { padding: 3rem 2rem 6rem; box-shadow: none; } .article-header h1 { font-size: 2rem; } h2 { font-size: 1.35rem; margin-top: 4rem; } figure { margin: 2rem -0.5rem; } .pull-quote { margin: 2.5rem 0; padding: 1.5rem 1.75rem; font-size: 1.05rem; } .svg-illustration svg { max-width: 100%; } .era-marker { margin-left: -2rem; margin-right: -2rem; padding-left: 2rem; padding-right: 2rem; } .part-divider { margin-left: -2rem; margin-right: -2rem; padding-left: 2rem; padding-right: 2rem; } }
+        @media (max-width: 480px) { body { font-size: 16px; } .article-wrapper { padding: 2rem 1.25rem 5rem; } .article-header h1 { font-size: 1.7rem; } figure { margin: 1.5rem -0.25rem; } .era-marker { margin: 3rem -1.25rem 1.5rem; padding-left: 1.25rem; padding-right: 1.25rem; } .part-divider { margin: 4rem -1.25rem 3rem; padding: 2rem 1.25rem; } }
+        @media print { body { background: #fff; color: #333; font-size: 11pt; } .progress-bar, .back-to-top, .skip-link { display: none !important; } .svg-illustration { display: none !important; } .svg-caption { display: none !important; } .article-wrapper { max-width: 100%; padding: 1rem; } h1, h2, h3, strong { color: #000; } .pull-quote { border-left-color: #333; color: #000; background: none; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <a href="#article" class="skip-link">İçeriğe atla</a>
+    <div class="progress-bar" id="progressBar"></div>
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Başa dön">↑</button>
+
+    <article class="article-wrapper" id="article"></article>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+const MARKDOWN_CONTENT = `
+<header class="article-header">
+<h1>Uluslararası Zaman Yönetimi: Zaman Dilimleri ve Uygulamaları</h1>
+<div class="article-meta">
+    <span>📅 Temmuz 2024</span>
+    <span>🔄 Mayıs 2026</span>
+    <span>⏱️ ~22 dk</span>
+    <span class="tag">Timezone</span>
+    <span class="tag">UTC</span>
+    <span class="tag">IANA</span>
+</div>
+</header>
+
+<div class="svg-illustration full-width">
+<svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .tl-path { stroke: #e0ddd8; stroke-width: 2.5; fill: none; stroke-dasharray: 6,4; }
+    .tl-dot { fill: #2563eb; }
+    .tl-dot-muted { fill: #d4d0ca; }
+    .tl-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; fill: #3d3d3d; text-anchor: middle; font-weight: 500; }
+    .tl-year { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; fill: #8c8c8c; text-anchor: middle; font-weight: 600; }
+    .tl-icon { fill: none; stroke: #3d3d3d; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .tl-era { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 9px; fill: #8c8c8c; text-anchor: middle; letter-spacing: 0.08em; text-transform: uppercase; }
+    .tl-node { opacity: 0; animation: fadeInUp 0.6s ease-out forwards; }
+    .tl-node:nth-child(2) { animation-delay: 0.15s; }
+    .tl-node:nth-child(3) { animation-delay: 0.3s; }
+    .tl-node:nth-child(4) { animation-delay: 0.45s; }
+    .tl-node:nth-child(5) { animation-delay: 0.6s; }
+    .tl-node:nth-child(6) { animation-delay: 0.75s; }
+    .tl-node:nth-child(7) { animation-delay: 0.9s; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  <!-- U-shaped path: top-left → top-right → curve down → bottom-right → bottom-left -->
+  <path d="M80 90 L560 90 C620 90 630 130 630 170 C630 210 620 250 560 250 L250 250" class="tl-path"/>
+  <!-- Era labels -->
+  <text x="200" y="30" class="tl-era">Antik Çağ</text>
+  <text x="440" y="30" class="tl-era">Endüstri Devrimi</text>
+  <text x="440" y="310" class="tl-era">Dijital Çağ</text>
+  <text x="200" y="310" class="tl-era">Gelecek</text>
+  <!-- TOP ROW: left to right -->
+  <!-- 1. Güneş Saati -->
+  <g class="tl-node">
+    <circle cx="80" cy="90" r="6" class="tl-dot-muted"/>
+    <circle cx="80" cy="52" r="18" fill="none" stroke="#d4d0ca" stroke-width="1.8"/>
+    <line x1="80" y1="52" x2="80" y2="38" stroke="#8c8c8c" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="80" y1="52" x2="90" y2="47" stroke="#8c8c8c" stroke-width="1.2" stroke-linecap="round"/>
+    <text x="80" y="120" class="tl-year">~3500 BC</text>
+    <text x="80" y="138" class="tl-label">Güneş Saati</text>
+  </g>
+  <!-- 2. Mekanik Saat -->
+  <g class="tl-node">
+    <circle cx="240" cy="90" r="6" class="tl-dot-muted"/>
+    <rect x="225" y="38" width="30" height="40" rx="3" fill="none" stroke="#8c8c8c" stroke-width="1.8"/>
+    <circle cx="240" cy="54" r="10" fill="none" stroke="#8c8c8c" stroke-width="1.3"/>
+    <line x1="240" y1="54" x2="240" y2="47" stroke="#8c8c8c" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="240" y1="54" x2="246" y2="51" stroke="#8c8c8c" stroke-width="0.8" stroke-linecap="round"/>
+    <text x="240" y="120" class="tl-year">1300s</text>
+    <text x="240" y="138" class="tl-label">Mekanik Saat</text>
+  </g>
+  <!-- 3. Demiryolu -->
+  <g class="tl-node">
+    <circle cx="400" cy="90" r="7" class="tl-dot"/>
+    <path d="M382 48 L388 38 L412 38 L418 48 L418 64 L382 64 Z" class="tl-icon" stroke-width="1.8"/>
+    <circle cx="390" cy="68" r="4" class="tl-icon"/>
+    <circle cx="410" cy="68" r="4" class="tl-icon"/>
+    <text x="400" y="120" class="tl-year">1840</text>
+    <text x="400" y="138" class="tl-label">Demiryolu Kaosu</text>
+  </g>
+  <!-- 4. Greenwich -->
+  <g class="tl-node">
+    <circle cx="560" cy="90" r="7" class="tl-dot"/>
+    <circle cx="560" cy="50" r="18" fill="none" stroke="#3d3d3d" stroke-width="1.8"/>
+    <ellipse cx="560" cy="50" rx="9" ry="18" fill="none" stroke="#3d3d3d" stroke-width="0.9"/>
+    <line x1="542" y1="50" x2="578" y2="50" stroke="#3d3d3d" stroke-width="0.9"/>
+    <line x1="560" y1="32" x2="560" y2="68" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="560" y="120" class="tl-year">1884</text>
+    <text x="560" y="138" class="tl-label">Greenwich</text>
+  </g>
+  <!-- CURVE INDICATOR -->
+  <circle cx="630" cy="170" r="3" fill="#d4d0ca"/>
+  <!-- BOTTOM ROW: right to left -->
+  <!-- 5. UTC -->
+  <g class="tl-node">
+    <circle cx="560" cy="250" r="7" class="tl-dot"/>
+    <circle cx="560" cy="214" r="5" fill="#2563eb" opacity="0.25"/>
+    <ellipse cx="560" cy="214" rx="17" ry="9" fill="none" stroke="#2563eb" stroke-width="1.2" transform="rotate(-30 560 214)"/>
+    <ellipse cx="560" cy="214" rx="17" ry="9" fill="none" stroke="#2563eb" stroke-width="1.2" transform="rotate(30 560 214)"/>
+    <ellipse cx="560" cy="214" rx="17" ry="9" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+    <text x="560" y="275" class="tl-year">1967</text>
+    <text x="560" y="293" class="tl-label">UTC / Atom Saati</text>
+  </g>
+  <!-- 6. IANA -->
+  <g class="tl-node">
+    <circle cx="400" cy="250" r="7" class="tl-dot"/>
+    <ellipse cx="400" cy="206" rx="15" ry="6" fill="none" stroke="#3d3d3d" stroke-width="1.8"/>
+    <path d="M385 206 L385 230 C385 234 391 237 400 237 C409 237 415 234 415 230 L415 206" fill="none" stroke="#3d3d3d" stroke-width="1.8"/>
+    <ellipse cx="400" cy="230" rx="15" ry="6" fill="none" stroke="#3d3d3d" stroke-width="0.9"/>
+    <text x="400" y="275" class="tl-year">1986</text>
+    <text x="400" y="293" class="tl-label">IANA tzdata</text>
+  </g>
+  <!-- 7. Leap Second Sonu -->
+  <g class="tl-node">
+    <circle cx="250" cy="250" r="6" class="tl-dot-muted"/>
+    <path d="M238 210 L250 198 L262 210 L257 210 L257 232 L243 232 L243 210 Z" fill="none" stroke="#8c8c8c" stroke-width="1.5"/>
+    <text x="250" y="275" class="tl-year">2035</text>
+    <text x="250" y="293" class="tl-label">Leap Sec. Sonu</text>
+  </g>
+</svg>
+</div>
+<p class="svg-caption">Zamanı ölçme yolculuğu — binlerce yılın özeti</p>
+
+<p class="lead">Bir arkadaşınız İstanbul'dan arayıp "saat kaç?" diye sorduğunda düşünmeden cevap verirsiniz. Peki ya Tokyo'daki bir sunucu, New York'taki bir kullanıcıya İstanbul'da gerçekleşen bir işlemin saatini göstermeye çalışırsa? İşte bu yazı, tam da bu basit sorunun arkasındaki şaşırtıcı derecede karmaşık dünyayı keşfetmekle ilgili.</p>
+
+**2026 FIFA Dünya Kupası** bu yaz ABD, Kanada ve Meksika'da oynanacak. Final 19 Temmuz'da New Jersey'de — ET 16:00 başlangıç, İstanbul'da **gece 23:00.** Ama NBA Finalleri'ni takip edenler daha kötüsünü bilir: Golden State–Boston maçı San Francisco'da 18:00'de başlarken, Türk taraftarı sabah **04:00'te** alarm kurar.
+
+Bu sadece spor değil. Bir Zoom toplantısı, bir deploy window'u, bir canlı yayın — "saat kaç?" sorusu aslında **"kimin saati?"** sorusudur. Ve bu sorunun cevabı, binlerce yıllık bir yolculuğun ürünü.
+
+<details>
+<summary><strong>📑 İçindekiler</strong></summary>
+
+**Bölüm 1 — Hikâye**
+
+| # | Bölüm | Seviye |
+|---|-------|--------|
+| 1 | [Güneşin Söylediği Saat](#gunesin-soyledigi-saat) | ☀️ Antik |
+| 2 | [Her İstasyonun Saati Farklı](#her-istasyonun-saati-farkli) | 🚂 1840 |
+| 3 | [Greenwich'ten Başlıyor Her Şey](#greenwichten-basliyor-her-sey) | 🌍 1884 |
+| 4 | [Saat Kaçta Uyandığınızı Politikacılar Belirliyor](#saat-kacta-uyandiginizi-politikacilar-belirliyor) | 🏛️ Politika |
+| 5 | [UTC: Herkesin Anlaştığı Tek Nokta](#utc-herkesin-anlastigi-tek-nokta) | ⚛️ 1960s |
+| 6 | [Yaz Saati: Avrupa'nın Bitmeyen Tartışması](#yaz-saati-avrupanin-bitmeyen-tartismasi) | 🔄 DST |
+| 7 | [Sanıyorsunuz ki Zaman Dilimleri Basit...](#saniyorsunuz-ki-zaman-dilimleri-basit) | ⚠️ Yanılgılar |
+| 8 | [ISO 8601](#herkesin-konustugu-format-iso-8601) | 📐 Format |
+| 9 | [Gelecek: Neler Değişiyor?](#gelecek-neler-degisiyor) | 🔮 2035 |
+
+**Bölüm 2 — Yazılımcılar İçin**
+
+| # | Bölüm | Seviye |
+|---|-------|--------|
+| 10 | [Yazılım Dünyasında Zaman](#yazilim-dunyasinda-zaman-tek-bir-kural) | 💻 Dijital |
+| 11 | [Zaman Tipleri: Epoch, DateTime, DateTimeOffset](#zaman-tipleri-epoch-datetime-datetimeoffset) | 🔢 Tipler |
+| 12 | [İki Veritabanı, İki Dünya](#iki-veritabani-iki-dunya) | 🗃️ Veritabanları |
+| 13 | [Çağımızın Derdi](#cagimizin-derdi-cozduk-dedikleri-sorunlar) | ⚡ Platform |
+| 14 | [Test ve CI/CD Stratejisi](#test-ve-cicd-stratejisi) | 🧪 Test |
+
+</details>
+
+<div class="era-marker"><span class="era-badge">☀️ Antik Çağ — Yerel Öğle</span></div>
+
+## Güneşin Söylediği Saat
+
+Binlerce yıl boyunca insanlar tek bir kurala güvendi: güneş tam tepedeyken öğle. Her şehir, her köy kendi güneşine bakardı. Bağdat'ın öğlesi ile İstanbul'un öğlesi farklıydı — ama kimsenin umurunda değildi. Çünkü bir haberci at sırtında günlerce seyahat ediyor ve "birkaç dakikalık fark" kimsenin dünyasını değiştirmiyordu.
+
+Bu düzen binlerce yıl sorunsuz çalıştı. Ta ki...
+
+<div class="era-marker"><span class="era-badge">🚂 1840 — Demiryolu Kaosu</span></div>
+
+## Her İstasyonun Saati Farklı
+
+1830'larda buharlı tren Avrupa ve Amerika'yı fethetti. Ve bir anda "yerel öğle" sistemi çöktü.
+
+Hayal edin: İngiltere'de Bristol'dan Londra'ya tren seferi var. Bristol, Londra'dan 11 dakika geride. Saat farklılıkları yüzünden yolcular trenleri kaçırıyor, hat çakışmaları oluyor, kazalar yaşanıyor.
+
+Her istasyonun duvarında farklı bir saat asılı. Makinist Londra saatine göre yola çıkıyor; yolcu Bristol saatine göre perona geliyor.
+
+<div class="svg-illustration">
+<svg viewBox="0 0 580 180" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .rail-text { font-family: 'Plus Jakarta Sans', sans-serif; fill: #3d3d3d; }
+    .rail-muted { font-family: 'Plus Jakarta Sans', sans-serif; fill: #8c8c8c; }
+    .rail-line { stroke: #d4d0ca; stroke-width: 3; fill: none; }
+    .rail-clock { fill: none; stroke: #3d3d3d; stroke-width: 1.5; }
+    .rail-hand { stroke: #1a1a1a; stroke-width: 1.5; stroke-linecap: round; }
+    .rail-accent { fill: #2563eb; }
+    .rail-warn { fill: #c2410c; }
+  </style>
+  <!-- Railway line -->
+  <line x1="60" y1="130" x2="520" y2="130" class="rail-line"/>
+  <line x1="60" y1="126" x2="60" y2="134" stroke="#8c8c8c" stroke-width="2"/>
+  <line x1="290" y1="126" x2="290" y2="134" stroke="#8c8c8c" stroke-width="2"/>
+  <line x1="520" y1="126" x2="520" y2="134" stroke="#8c8c8c" stroke-width="2"/>
+  <!-- Bristol clock — 11:49 -->
+  <circle cx="60" cy="65" r="28" class="rail-clock"/>
+  <line x1="60" y1="65" x2="60" y2="44" class="rail-hand"/>
+  <line x1="60" y1="65" x2="48" y2="60" class="rail-hand" stroke-width="1"/>
+  <text x="60" y="108" class="rail-text" text-anchor="middle" font-size="11" font-weight="600">Bristol</text>
+  <text x="60" y="158" class="rail-muted" text-anchor="middle" font-size="9">11:49</text>
+  <!-- Exeter clock — 11:46 -->
+  <circle cx="290" cy="65" r="28" class="rail-clock"/>
+  <line x1="290" y1="65" x2="290" y2="44" class="rail-hand"/>
+  <line x1="290" y1="65" x2="277" y2="61" class="rail-hand" stroke-width="1"/>
+  <text x="290" y="108" class="rail-text" text-anchor="middle" font-size="11" font-weight="600">Exeter</text>
+  <text x="290" y="158" class="rail-muted" text-anchor="middle" font-size="9">11:46</text>
+  <!-- London clock — 12:00 -->
+  <circle cx="520" cy="65" r="28" stroke="#2563eb" stroke-width="2" fill="none"/>
+  <line x1="520" y1="65" x2="520" y2="42" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+  <line x1="520" y1="65" x2="520" y2="65" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+  <text x="520" y="108" class="rail-text" text-anchor="middle" font-size="11" font-weight="700">Londra</text>
+  <text x="520" y="158" font-size="9" text-anchor="middle" fill="#2563eb" font-family="Plus Jakarta Sans, sans-serif" font-weight="600">12:00</text>
+  <!-- Difference annotations -->
+  <path d="M80 150 Q175 170 270 150" fill="none" stroke="#c2410c" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="175" y="172" font-size="8" fill="#c2410c" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif">−14 dk fark</text>
+  <path d="M310 150 Q405 170 500 150" fill="none" stroke="#c2410c" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="405" y="172" font-size="8" fill="#c2410c" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif">−14 dk fark</text>
+</svg>
+</div>
+<p class="svg-caption">1840'lar İngiltere — aynı anda üç istasyonda üç farklı saat</p>
+
+Çözüm 1847'de geldi: İngiliz demiryolları **Railway Time** adı altında tüm hatlarında Greenwich saatini (GMT) zorunlu kıldı. 1880'de tüm Britanya bunu resmi kabul etti.
+
+Ama dünya çapında kaos devam ediyordu. ABD'de 1883'te **300'den fazla yerel saat** vardı. Demiryolu şirketleri kendi aralarında 4 bölge belirledi — ama yasal değildi.
+
+<div class="era-marker"><span class="era-badge">🌍 1884 — Küresel Standart</span></div>
+
+## Greenwich'ten Başlıyor Her Şey
+
+1884, Washington. 25 ülkenin delegesi bir araya geldi: **Uluslararası Meridyen Konferansı.** Amaç: tüm dünya için tek bir referans noktası belirlemek.
+
+Oylamayla Londra'nın güneydoğusundaki Greenwich Rasathanesi'nden geçen çizgi, **0° başlangıç meridyeni** kabul edildi. Fransa çekimser kaldı (Paris meridyenini savunuyordu), ama sonunda herkes Greenwich'e razı oldu.
+
+Kural basittir: her 15 derecelik meridyen dilimi bir saate eşittir. Doğuya gittikçe saat ileri (+), batıya gittikçe geri (−). Toplam 24 dilim, 24 saat.
+
+Kulağa temiz ve zarif geliyor, değil mi? Şunu deneyin: Temmuz'da İstanbul'da öğlen 12:00. Berlin'deki arkadaşınıza "saat kaç?" diye sorun — cevap 11:00. Aynı soruyu Ocak'ta sorun: Berlin bu sefer 10:00 diyor. Aradaki fark **bir saatten iki saate çıktı.** Ne değişti? Türkiye artık yaz-kış geçişi yapmıyor, ama Almanya yapıyor.
+
+<div class="pull-quote">Aynı iki şehir arasındaki saat farkı bile <em>yılın farklı zamanlarında değişebilir.</em></div>
+
+Problem şu: bu teori gerçek dünyayla tanıştığında çöküyor. Çünkü **zaman dilimleri fizik değil, politikadır.**
+
+<div class="svg-illustration">
+<svg viewBox="0 0 580 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .cn-text { font-family: 'Plus Jakarta Sans', sans-serif; fill: #3d3d3d; }
+    .cn-muted { font-family: 'Plus Jakarta Sans', sans-serif; fill: #8c8c8c; font-size: 9px; }
+    .cn-zone { fill: rgba(37,99,235,0.08); stroke: #2563eb; stroke-width: 1.5; }
+    .cn-meridian { stroke: #d4d0ca; stroke-width: 1; stroke-dasharray: 4,4; }
+    .cn-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; fill: #2563eb; font-weight: 600; text-anchor: middle; }
+  </style>
+  <!-- China outline (simplified) -->
+  <path d="M120 50 C150 40 250 35 320 45 C380 52 430 60 460 80 C480 95 470 130 440 145 C400 160 350 165 290 160 C230 155 180 145 150 130 C125 115 110 80 120 50Z" class="cn-zone"/>
+  <!-- Meridian lines -->
+  <line x1="160" y1="25" x2="160" y2="185" class="cn-meridian"/>
+  <line x1="240" y1="25" x2="240" y2="185" class="cn-meridian"/>
+  <line x1="320" y1="25" x2="320" y2="185" class="cn-meridian"/>
+  <line x1="400" y1="25" x2="400" y2="185" class="cn-meridian"/>
+  <!-- Zone labels at top -->
+  <text x="160" y="18" class="cn-muted" text-anchor="middle">UTC+5</text>
+  <text x="240" y="18" class="cn-muted" text-anchor="middle">UTC+6</text>
+  <text x="320" y="18" class="cn-muted" text-anchor="middle">UTC+7</text>
+  <text x="400" y="18" class="cn-muted" text-anchor="middle">UTC+8</text>
+  <!-- Single time badge -->
+  <rect x="230" y="85" width="120" height="30" rx="15" fill="#2563eb"/>
+  <text x="290" y="105" font-family="Plus Jakarta Sans, sans-serif" font-size="12" fill="white" text-anchor="middle" font-weight="700">UTC+8 (tek saat)</text>
+  <!-- City markers -->
+  <circle cx="420" cy="90" r="3" fill="#2563eb"/>
+  <text x="420" y="82" class="cn-label" font-size="9">Pekin</text>
+  <circle cx="165" cy="100" r="3" fill="#c2410c"/>
+  <text x="165" y="92" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="#c2410c" text-anchor="middle" font-weight="600">Urumçi</text>
+  <!-- Annotation -->
+  <text x="290" y="192" class="cn-muted" text-anchor="middle" font-size="10">4 meridyen dilimi — ama tüm ülke aynı saati gösteriyor</text>
+</svg>
+</div>
+<p class="svg-caption">Çin'in doğusu ile batısı arasında 4 saatlik meridyen farkı var — ama tüm ülke tek saat kullanıyor</p>
+
+Çin'e bakın: ülkenin doğusu ile batısı arasında 4 meridyen dilimi var. Teoriye göre 4 farklı saat olmalı. Ama Çin, politik bir kararla tüm ülkede tek bir zaman dilimi kullanıyor: UTC+8. Yani Pekin'de güneş tam tepedeyken, Urumçi'de henüz öğlene 2 saat var — ama ikisi de "öğlen 12" diyor.
+
+<p class="section-hook">Peki bir ülke kendi saatini gerçekten bir gecede değiştirebilir mi? Türkiye'nin hikâyesi tam olarak bunu anlatıyor.</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">🏛️ 20. Yüzyıl — Politika Sahneye Çıkıyor</span></div>
+
+## Saat Kaçta Uyandığınızı Politikacılar Belirliyor
+
+Zaman dilimleri bir kere belirlenip sonsuza kadar sabit kalan şeyler değil. Ülkeler, bazen oldukça sürpriz sebeplerle, saatlerini değiştirebilir.
+
+### Türkiye: Bir Saatlik Kaos Kronolojisi
+
+2016'dan önce Türkiye GMT+2'deydi. Yaz gelince saatler bir ileri alınır, kış gelince geri alınırdı — tıpkı Avrupa gibi.
+
+Sonra olan oldu:
+
+- **1940** — Bakanlar Kurulu kararıyla yaz saati uygulaması resmen başladı
+- **1952–1961** — Uygulama askıya alındı
+- **1965–1972** — Tekrar askıya alındı, sonrasında aralıksız devam edildi
+- **2008** — Enerji Bakanlığı GMT+2,5 zaman dilimi önerdi. İlerleme olmadı.
+- **2013** — Enerji Bakanlığı uygulamanın kaldırılması yönünde karar aldı
+- **2015** — Yaz saatinden çıkış, 1 Kasım seçimleri yüzünden ertelendi. Evet, bir *seçim* yüzünden tüm ülkenin saati bir hafta farklı kaldı.
+- **8 Eylül 2016** — Bakanlar Kurulu kararıyla yaz saati kalıcı hâle getirildi (GMT+3)
+- **14 Eylül 2017** — Danıştay kararı durdurdu
+- **23 Ekim 2017** — Bakanlar Kurulu yeniden devam kararı aldı
+- **2 Ekim 2018** — Son nokta: yaz saati uygulaması kalıcı hâle geldi
+
+Dikkat edin: yaz saati uygulamasından *vazgeçilmedi* — tam tersi, **kalıcı olarak yaz saatine geçildi.**
+
+<div class="svg-illustration">
+<svg viewBox="0 0 580 160" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .tr-text { font-family: 'Plus Jakarta Sans', sans-serif; fill: #3d3d3d; }
+    .tr-clock { fill: none; stroke: #3d3d3d; stroke-width: 2; }
+    .tr-hand-h { stroke: #1a1a1a; stroke-width: 2.5; stroke-linecap: round; }
+    .tr-hand-m { stroke: #1a1a1a; stroke-width: 1.5; stroke-linecap: round; }
+    .tr-badge { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; }
+    .tr-arrow { fill: none; stroke: #2563eb; stroke-width: 2; stroke-linecap: round; marker-end: url(#arrowTR); }
+  </style>
+  <defs>
+    <marker id="arrowTR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10" fill="#2563eb"/></marker>
+  </defs>
+  <!-- Before: UTC+2 -->
+  <text x="145" y="22" class="tr-text" text-anchor="middle" font-size="10" font-weight="600">2016 ÖNCESİ</text>
+  <circle cx="145" cy="80" r="38" class="tr-clock"/>
+  <line x1="145" y1="80" x2="145" y2="52" class="tr-hand-h"/>
+  <line x1="145" y1="80" x2="170" y2="80" class="tr-hand-m"/>
+  <rect x="108" y="125" width="74" height="22" rx="11" fill="#eae8e4" stroke="#d4d0ca" stroke-width="1"/>
+  <text x="145" y="140" class="tr-badge" fill="#8c8c8c" text-anchor="middle">UTC+2 / +3</text>
+  <text x="145" y="158" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#8c8c8c" text-anchor="middle">yaz-kış geçişi var</text>
+  <!-- Arrow -->
+  <path d="M220 80 L350 80" class="tr-arrow"/>
+  <text x="285" y="70" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="#2563eb" text-anchor="middle" font-weight="600">8 Eylül 2016</text>
+  <!-- After: UTC+3 (permanent) -->
+  <text x="435" y="22" class="tr-text" text-anchor="middle" font-size="10" font-weight="600">2016 SONRASI</text>
+  <circle cx="435" cy="80" r="38" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+  <line x1="435" y1="80" x2="435" y2="50" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="435" y1="80" x2="460" y2="70" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round"/>
+  <rect x="398" y="125" width="74" height="22" rx="11" fill="rgba(37,99,235,0.08)" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="435" y="140" class="tr-badge" fill="#2563eb" text-anchor="middle">UTC+3</text>
+  <text x="435" y="158" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#2563eb" text-anchor="middle">kalıcı yaz saati</text>
+</svg>
+</div>
+<p class="svg-caption">Türkiye'nin zaman dilimi geçişi — yaz-kış döngüsünden kalıcı UTC+3'e</p>
+
+<div class="pull-quote">Bir seçimi etkileyeceği düşüncesiyle bile tüm ülkenin saati <em>bir haftalığına</em> değişebiliyor.</div>
+
+### Bu Sadece Türkiye'ye Özgü Değil
+
+Son yıllarda benzer kararlar alan başka ülkeler de var:
+
+- **Grönland (Mart 2023)** — Kalıcı yaz saatine geçti (UTC−02:00). Artık saat değiştirmiyor.
+- **Ukrayna (Temmuz 2024)** — DST'yi kaldırdı, son geçiş 27 Ekim 2024'te yapıldı. Kalıcı UTC+2 (EET).
+- **Rusya (2014)** — Önce kalıcı yaz (2011), sonra kalıcı kış (2014). Moskova: UTC+3.
+
+Bütün bunlar bir gerçeği perçinliyor: zaman dilimleri *hiçbir zaman* "tamamlanmış" bir konu değil. Ve bu durum, tüm dünyada herhangi bir ülkede tekrar gerçekleşebilir. Peki bu kadar değişken bir şeyi nasıl standartlaştıracağız?
+
+<p class="section-hook">Cevap, 1960'larda atom saatlerinin devreye girmesiyle geldi.</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">⚛️ 1960s — Atom Hassasiyeti</span></div>
+
+## UTC: Herkesin Anlaştığı Tek Nokta
+
+GMT'nin sorunu şuydu: Dünya'nın dönüşüne dayanıyordu ve bu dönüş mükemmel değildi. Atom saatleri devreye girince, çok daha kesin bir referans mümkün hâle geldi: **UTC (Koordineli Evrensel Zaman).**
+
+UTC, iki şeyin birleşimidir:
+
+- **Uluslararası Atom Saati (TAI)** — Dünya genelinde ~400 süper hassas atom saatinin ortalaması. Kesin hızı sağlar.
+- **Evrensel Zaman (UT1)** — Dünya'nın gerçek dönüş hızı. Gelgitler ve jeofiziksel süreçler nedeniyle düzensizdir.
+
+Bu ikisinin kombinasyonu, UTC'nin hem doğru hem de Dünya'nın dönüşüyle uyumlu kalmasını sağlar. 1960'ta kavram resmileşti, 1967'de adı benimsendi. O günden bu yana **GMT artık bir standart değil, sadece bir zaman dilimi adıdır** (UTC+0 ile eşdeğer).
+
+| Kavram | Ne İfade Eder | Bugünkü Kullanımı |
+|--------|--------------|-------------------|
+| **GMT** | Dünya'nın dönüşüne dayalı eski standart | Sadece bir zaman dilimi adı (UTC+0) |
+| **UTC** | Atom saati + Dünya dönüşü | Küresel standart |
+| **TAI** | Saf atomik ölçüm | Bilimsel referans (UTC'den 37 saniye ileride) |
+| **Zulu (Z)** | UTC'nin askeri kısaltması | Havacılık, NATO |
+
+Ama bir sorun var: Dünya'nın dönüşü yavaşlıyor. Atom saatleri mükemmel tempo tutarken, gezegen geride kalıyor. Bu farkı kapatmak için UTC'ye ara sıra bir saniye ekleniyor — **saniye atlaması (leap second).** Eğer Dünya'nın dönüşü yavaşlıyorsa pozitif bir saniye eklenir; negatif saniye (çıkarma) teorik olarak mümkün ama şimdiye kadar hiç yapılmadı.
+
+1972'den bu yana toplam **27 kez** eklendi. Son eklenen: 31 Aralık 2016. O günden bu yana — 10 yıl — hiç eklenmedi.
+
+<div class="callout callout-warn">
+<strong>⚠️ 2035: Leap Second'ın Sonu Geliyor</strong><br><br>
+18 Kasım 2022'de Genel Ağırlıklar ve Ölçüler Konferansı (CGPM), <strong>Resolution 4</strong> ile leap second mekanizmasının 2035'te veya öncesinde sona ereceğini kararlaştırdı. WRC-23 (Dubai, Aralık 2023) bu kararı resmen tanıdı. 28. CGPM (2026) yeni limitleri onaylayacak.<br><br>
+Neden kaldırılıyor? Çünkü tek bir saniyelik atlama, Reddit'i çökertecek, Cloudflare'ı durduracak, havalimanlarını geciktirecek kadar tehlikeli olabiliyor. Sadece 6 ay öncesinden duyuruluyor — öngörülemez. Google ve Amazon "leap smear" ile kendi çözümlerini üretmek zorunda kalmıştı. 2035'ten sonra bu sorunla uğraşmak tarih olacak.
+</div>
+
+<p class="section-hook">UTC standardımız oldu. Ama yaz-kış saati uygulamaları hâlâ bir gerçek. Avrupa'da bu konuda yıllardır devam eden bir tartışma var — sonucu hâlâ belirsiz.</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">🔄 Yaz Saati — Bitmeyen Tartışma</span></div>
+
+## Yaz Saati: Avrupa'nın Bitmeyen Tartışması
+
+Birçok ülke yaz aylarında saatlerini bir ileri alır: daha uzun akşamlar, daha fazla gün ışığı. Avrupa'da bu, CET (UTC+1) ile CEST (UTC+2) arasında gidip gelme demek:
+
+| Kısaltma | Tanım | UTC Offset | Dönem |
+|----------|-------|-----------|-------|
+| CET | Central European Time | UTC+1 | Kış (Kasım–Mart) |
+| CEST | Central European Summer Time | UTC+2 | Yaz (Mart–Ekim) |
+
+CEST yerine CEDT, ECST veya MESZ de görebilirsiniz. Adı ne olursa olsun, UTC+2 olması yeterli — Greenwich'ten 2 saat ileride.
+
+2018'de Avrupa Komisyonu tarihi bir anket yaptı: 4,6 milyon kişi katıldı, **%84'ü saat değişikliğinin kaldırılmasını** istedi. Mart 2019'da Parlamento onayladı. Ama her ülke kalıcı yaz mı kış mı istediğini seçmek zorunda — ve kimse anlaşamıyor.
+
+**Mayıs 2026 itibarıyla:** Konsey onayı hâlâ yok. Ekim 2025'te EP plenerde tartışıldı, somut tarih verilmedi. Süreç "tamamen bloke." IANA'nın uyarısı geçerli: "1 yıldan az sürede bazı bilgisayar saatleri hatalı çalışabilir."
+
+Bazı ülkeler beklemedi: Türkiye (2016, kalıcı yaz), Rusya (2014, kalıcı kış), Ukrayna (2024, kalıcı kış), Grönland (2023, kalıcı yaz).
+
+<p class="section-hook">Tüm bu kaos — farklı ülkelerin farklı zamanlarda farklı kararlar alması — yazılım dünyasında ne tür sorunlar yaratıyor?</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">⚠️ Yanılgılar — Karanlık Odada Lego</span></div>
+
+## Sanıyorsunuz ki Zaman Dilimleri Basit...
+
+Yazılıma geçmeden, yaygın yanılgıları temizleyelim. Bunları bilmeden geliştirme yapmak, karanlık odada lego basmaya benziyor:
+
+**"GMT = UTC = Zulu, hepsi aynı"** — Çok yakın ama aynı değil. Üçü de 0° meridyeni referans alır, yaz saati uygulamaz. Fark: GMT eski standarttı (dönüşe dayalı); UTC atomik hassasiyetle modern versiyonu; Zulu ise UTC'nin havacılık/askeri kısaltması. Bugün **UTC tercih edilen standarttır.**
+
+**"Offsetler ±12 ile sınırlı"** — Hayır. UTC+13 ve UTC+14 de var. Pasifik adaları tarih çizgisinin "doğru tarafında" kalmak için bunları kullanıyor.
+
+**"Her offset tam saat"** — Hayır:
+
+| Ülke | Offset |
+|------|--------|
+| İran | UTC+3:30 |
+| Hindistan | UTC+5:30 |
+| Nepal | UTC+5:45 |
+| Chatham Adaları (Yeni Zelanda) | UTC+12:45 |
+
+**"DST her yerde aynı tarihte başlar"** — Hayır. Güney Yarımküre'de yaz zıt aylarda. ABD'deki Navajo Ulusu gibi kısmi uyumlar da var.
+
+**"CST güvenilir bir kısaltma"** — Kesinlikle hayır. Beş farklı anlamı var:
+
+| Kısaltma | Temsil Ettiği |
+|----------|--------------|
+| CST | Central Standard Time (Kuzey Amerika) |
+| CST | Central Standard Time (Avustralya) |
+| CST | Central Summer Time (Avustralya) |
+| CST | China Standard Time |
+| CST | Cuba Standard Time |
+
+**"Büyük ülke = çok dilim"** — Her zaman değil. Çin 4 meridyeni kaplar ama tek saat kullanır.
+
+**Kural:** Kısaltmalara hiçbir zaman güvenmeyin. Yalnızca IANA tanımlayıcıları (\`Europe/Istanbul\`) veya UTC offset (\`UTC+03:00\`) kullanın.
+
+<p class="section-hook">Peki tarihi ve saati hangi formatta yazacağız? Herkesin anlaşabileceği bir standart var mı?</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">📐 Format — Evrensel Dil</span></div>
+
+## Herkesin Konuştuğu Format: ISO 8601
+
+Tarihleri ve saatleri kaydetmenin evrensel formatı: **ISO 8601** (1988). Amacı: tarihlerin farklı ülkelerde yanlış yorumlanmasını önlemek.
+
+Temel ilkesi: **büyükten küçüğe** sırala. Yıl → ay → gün → saat → dakika → saniye. Her değer sabit haneli, başında sıfır ile doldurulur.
+
+İki biçim: temel (\`20090106\`) ve genişletilmiş (\`2009-01-06\`). Azaltılmış hassasiyet de mümkün: \`2004-05\` geçerli (Mayıs 2004).
+
+<div class="svg-illustration">
+<svg viewBox="0 0 580 140" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .iso-text { font-family: 'Plus Jakarta Sans', sans-serif; fill: #3d3d3d; }
+    .iso-mono { font-family: 'JetBrains Mono', monospace; font-size: 16px; fill: #1a1a1a; font-weight: 500; }
+    .iso-part { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 9px; font-weight: 600; text-anchor: middle; }
+    .iso-bracket { stroke-width: 1.5; fill: none; stroke-linecap: round; }
+  </style>
+  <text x="290" y="40" class="iso-mono" text-anchor="middle">2024-07-04T17:00:00+03:00</text>
+  <path d="M178 50 L178 58 L210 58" class="iso-bracket" stroke="#2563eb"/>
+  <text x="194" y="72" class="iso-part" fill="#2563eb">Yıl</text>
+  <path d="M217 50 L217 58 L238 58" class="iso-bracket" stroke="#16a34a"/>
+  <text x="228" y="72" class="iso-part" fill="#16a34a">Ay</text>
+  <path d="M245 50 L245 58 L266 58" class="iso-bracket" stroke="#9333ea"/>
+  <text x="256" y="72" class="iso-part" fill="#9333ea">Gün</text>
+  <text x="274" y="72" class="iso-part" fill="#8c8c8c">T</text>
+  <path d="M281 50 L281 58 L302 58" class="iso-bracket" stroke="#c2410c"/>
+  <text x="292" y="72" class="iso-part" fill="#c2410c">Saat</text>
+  <path d="M309 50 L309 58 L330 58" class="iso-bracket" stroke="#c2410c"/>
+  <text x="320" y="72" class="iso-part" fill="#c2410c">Dk</text>
+  <path d="M337 50 L337 58 L358 58" class="iso-bracket" stroke="#c2410c"/>
+  <text x="348" y="72" class="iso-part" fill="#c2410c">Sn</text>
+  <path d="M363 50 L363 58 L404 58" class="iso-bracket" stroke="#2563eb"/>
+  <text x="384" y="72" class="iso-part" fill="#2563eb">UTC Offset</text>
+  <rect x="80" y="90" width="420" height="40" rx="6" fill="#f3f2ef"/>
+  <text x="140" y="115" font-family="JetBrains Mono, monospace" font-size="10" fill="#3d3d3d">...00Z</text>
+  <text x="140" y="128" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#8c8c8c" text-anchor="middle">→ UTC</text>
+  <text x="290" y="115" font-family="JetBrains Mono, monospace" font-size="10" fill="#2563eb" text-anchor="middle">...00+03:00</text>
+  <text x="290" y="128" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#8c8c8c" text-anchor="middle">→ Türkiye</text>
+  <text x="440" y="115" font-family="JetBrains Mono, monospace" font-size="10" fill="#3d3d3d" text-anchor="middle">...00-05:00</text>
+  <text x="440" y="128" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#8c8c8c" text-anchor="middle">→ ABD Doğu</text>
+</svg>
+</div>
+<p class="svg-caption">ISO 8601 formatının anatomisi — büyükten küçüğe, her parça sabit haneli</p>
+
+Zaman dilimi bilgisi, UTC veya offset olarak eklenir. "Offset" = UTC'den kaç saat fark:
+
+| Format | Anlam |
+|--------|-------|
+| \`2024-07-04T17:00:00Z\` | UTC (Z = Zulu = +00:00) |
+| \`2024-07-04T17:00:00+03:00\` | Türkiye (UTC+3) |
+| \`2024-07-04T17:00:00-05:00\` | ABD Doğu (UTC-5) |
+| \`2024-07-04T17:00:00+05:30\` | Hindistan (UTC+5:30) |
+
+\`Z\` gördüğünüzde "bu UTC'dir" deyin. \`+03:00\` gördüğünüzde "bu UTC'den 3 saat ilerideki bir yerin yerel saatidir" deyin. Bu kadar.
+
+---
+
+<div class="era-marker"><span class="era-badge">🔮 2035 — Gelecek</span></div>
+
+## Gelecek: Neler Değişiyor?
+
+İki büyük değişim ufukta:
+
+**1. Leap second bitiyor (2035).** Artık 23:59:60 gariplikleri tarih olacak:
+
+| Tarih | Olay |
+|-------|------|
+| 31 Aralık 2016 | Son eklenen leap second |
+| 18 Kasım 2022 | CGPM Resolution 4 kararı |
+| Aralık 2023 | WRC-23 (Dubai) resmen tanıdı |
+| 2026 | 28. CGPM — yeni limit gözden geçirilecek |
+| 2035 (veya önce) | Yeni UT1-UTC limiti yürürlüğe girecek |
+
+**2. AB'nin DST çıkmazı devam ediyor.** 2018'den beri "kaldıracağız" deniyor ama üye devletler anlaşamıyor. Yazılım geliştiriciler için bu, IANA güncellemelerini yakından takip etmeyi zorunlu kılıyor.
+
+---
+
+<div class="pull-quote">Zamanı ölçmek kolay. Zor olan, tüm dünyanın aynı anı <em>aynı dilde konuşmasını</em> sağlamak.</div>
+
+Binlerce yılın yolculuğundan bir ders: zaman dilimleri asla "biten" bir konu değil. Her yıl bir ülke kararını değiştiriyor, her IANA güncellemesi yeni bir gerçeklik getiriyor.
+
+<div class="part-divider">
+<div class="part-label">Bölüm 2</div>
+<div class="part-title">Yazılımcılar İçin: Uygulama</div>
+<div class="part-desc">Buradan itibaren zaman dilimlerini kodda, veritabanında ve CI/CD'de nasıl yöneteceğinizi ele alıyoruz. Hikâyeyi merak ettiyseniz, yukarıdaki kısım size yeter.</div>
+</div>
+
+<div class="era-marker"><span class="era-badge">💻 Dijital Çağ — Yazılım vs Zaman</span></div>
+
+## Yazılım Dünyasında Zaman: Tek Bir Kural
+
+Dünyanın neresinde olursanız olun — hepimiz aynı anı yaşıyoruz. Sadece onu farklı rakamlarla ifade ediyoruz.
+
+<div class="pull-quote">Tek bir "şu an" var. Saatler sadece <em>etiketler</em>.</div>
+
+Ama iş bilgi teknolojilerine geldiğinde, bu basit gerçek birçok değişkenle karmaşıklaşır:
+
+- Kullanıcı Tercihleri (User Profiles)
+- Tarayıcı Varsayılanları (Browser Default Settings)
+- İstek Başlıkları (Request Headers)
+- Oturum Bilgileri (Session Data)
+- Ortam / Sistem Değişkenleri (Environment Variables)
+
+"Saat kaç?" sorusunu doğru yanıtlamak için üç şeyi bilmelisiniz:
+
+1. Saat UTC olarak kaç?
+2. Bu soru hangi zaman dilimi için soruldu?
+3. Soruyu soran kişinin zaman dilimi ne?
+
+<div class="slogan">
+<div class="slogan-text"><span class="slogan-highlight">Global</span> Kaydet, <span class="slogan-highlight">Yerel</span> Görüntüle</div>
+<div class="slogan-sub">Tek kural. Zamanı UTC olarak sakla, kullanıcının diliminde göster.</div>
+</div>
+
+Örnek: İstanbul'da saat 17:00'de bir işlem yapıldı. Bu işlemi Tokyo'daki kullanıcı 23:00, New York'taki 10:00 olarak görmeli — ama hepsi aynı **anı** ifade etmeli.
+
+Daha karmaşık hâli: *"Tokyo'da iş gezisinde bulunan New York'lu bir kullanıcı, İstanbul'da yapılan işlemin saatini, işlemin gerçekleştirildiği yerel bilgiyle birlikte nasıl görmeli?"*
+
+**I18n (Uluslararasılaştırma)** dünyasının önerdiği adımlar:
+
+1. **Zaman bilgisini mutlaka UTC olarak kaydedin**
+2. **Kullanıcıların profillerinde zaman dilimi bilgilerini tutun**
+3. **Mümkünse tarih/zaman bilgisini sunucuda (UTC olarak) oluşturun**
+4. **Tüm sistem bileşenlerinin** (OS, framework, runtime, DB) **varsayılan TimeZone değeri UTC olsun**
+5. **Önemli** — İşlemin gerçekleştiği zaman dilimini (IANA ID) de kaydedin. Offset tek başına yetmez — aşağıdaki "Offset ≠ Time Zone" bölümüne bakın.
+6. **Duruma göre** — Yerel duvar saatini de kaydedin ("Bu işlem günün hangi saatlerinde yapılıyor?" sorusu yerel saatle daha anlamlıdır). Özellikle gelecek zamanlı kayıtlarda zorunlu.
+
+Pratik örnek — aynı anı 3 farklı yerde göstermek:
+
+\`\`\`javascript
+// Tek bir anı (UTC) farklı zaman dilimlerinde görüntüleme
+const event = new Date('2026-07-19T20:00:00Z'); // Final başlangıcı UTC
+
+const fmt = (tz) => event.toLocaleString('tr-TR', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
+
+console.log(fmt('America/New_York'));  // 16:00 (yerel)
+console.log(fmt('Europe/Istanbul'));   // 23:00
+console.log(fmt('Asia/Tokyo'));        // 05:00 (+1 gün)
+\`\`\`
+
+<p class="section-hook">UTC'de kaydetme prensibini anladık. Peki bu zamanı kodda nasıl temsil edeceğiz?</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">🔢 Tipler — Doğru Araç, Doğru İş</span></div>
+
+## Zaman Tipleri: Epoch, DateTime, DateTimeOffset
+
+### Unix Epoch ve Timestamp
+
+Bilgisayarlar zamanı genellikle tek bir sayı olarak ifade eder: **Unix timestamp** — 1 Ocak 1970 00:00:00 UTC'den itibaren geçen saniye sayısı. Zaman dilimi bilgisi taşımaz, her yerde aynı anı temsil eder.
+
+| Temsil | Değer | Anlam |
+|--------|-------|-------|
+| Unix timestamp | \`1721404800\` | 19 Temmuz 2024 12:00 UTC |
+| ISO 8601 | \`2024-07-19T12:00:00Z\` | Aynı an, okunabilir |
+| .NET Ticks | \`638565648000000000\` | Aynı an, 100ns hassasiyet |
+
+**Y2K38 uyarısı:** 32-bit Unix timestamp 19 Ocak 2038'de taşacak. Bugün başlayan projelerde 64-bit zaman kullanın.
+
+### DateTime vs DateTimeOffset (.NET)
+
+.NET'te en sık yapılan hata: \`DateTime\` ile \`DateTimeOffset\` arasındaki farkı bilmemek.
+
+\`\`\`csharp
+// ❌ DateTime — offset bilgisi YOK, anlam belirsiz
+DateTime ambiguous = new DateTime(2026, 7, 19, 17, 0, 0);
+// Bu 17:00 UTC mi? İstanbul mu? Tokyo mu? Belli değil.
+
+// ✅ DateTimeOffset — offset bilgisi taşır, anlam net
+DateTimeOffset precise = new DateTimeOffset(2026, 7, 19, 17, 0, 0, TimeSpan.FromHours(3));
+// 17:00+03:00 → İstanbul saati, UTC karşılığı 14:00Z
+
+// ✅ UTC olarak kaydetme
+DateTimeOffset utcNow = DateTimeOffset.UtcNow;  // Her zaman UTC
+\`\`\`
+
+| Tip | Offset Taşır | DB'de Güvenli | Ne Zaman Kullan |
+|-----|:---:|:---:|------|
+| \`DateTime\` | ❌ | ⚠️ | Sadece yerel UI gösterimi |
+| \`DateTimeOffset\` | ✅ | ✅ | API, DB, event kayıtları |
+| \`NodaTime.Instant\` | — | ✅ | Hassas zaman hesaplamaları |
+
+### NodaTime: Daha Güvenli Bir Alternatif
+
+Jon Skeet'in [NodaTime](https://nodatime.org/) kütüphanesi, .NET'in yerleşik zaman API'sinin belirsizliklerini ortadan kaldırır:
+
+\`\`\`csharp
+// NodaTime — açık ve güvenli
+Instant now = SystemClock.Instance.GetCurrentInstant();
+DateTimeZone zone = DateTimeZoneProviders.Tzdb["Europe/Istanbul"];
+ZonedDateTime istanbul = now.InZone(zone);  // 2026-07-19T20:00:00+03:00
+
+// DST geçişi sırasında belirsizlik? NodaTime sizi uyarır:
+LocalDateTime ambiguous = new LocalDateTime(2024, 10, 27, 2, 30);
+// Almanya'da bu saat iki kez yaşanır — NodaTime exception fırlatır
+\`\`\`
+
+NodaTime'ın avantajı: kendi IANA tzdata kopyasını NuGet paketi olarak taşır. OS güncellemesine bağımlı değilsiniz — \`NodaTime.TzdbCompiler\` ile istediğiniz IANA sürümünü pinleyebilirsiniz.
+
+### Offset ≠ Time Zone
+
+Bu, yazılımcıların en sık düştüğü tuzaklardan biridir:
+
+| Kavram | Ne Taşır | Örnek |
+|--------|----------|-------|
+| **Offset** | Sadece şu anki UTC farkı | \`+03:00\` |
+| **Time Zone (IANA ID)** | Tüm DST kuralları, geçmiş değişiklikler, gelecek planları | \`Europe/Istanbul\` |
+
+\`UTC+03:00\` gördüğünüzde bu Türkiye mi, Suudi Arabistan mı, Moskova mı bilemezsiniz. Üçü de şu an +3'te — ama farklı geçmişleri ve farklı kuralları var.
+
+\`\`\`csharp
+// ❌ Offset kaydettiniz — gelecekte anlamsızlaşabilir
+var record = new { Time = DateTimeOffset.Parse("2024-03-01T10:00:00+05:00") };
+// Kazakistan Mart 2024'te +6'dan +5'e geçti.
+// Bu kayıt değişiklik öncesi mi sonrası mı? Belli değil.
+
+// ✅ IANA zone ID + instant birlikte saklayın
+var record2 = new {
+    Instant = Instant.FromUtc(2024, 3, 1, 5, 0),
+    ZoneId = "Asia/Almaty" // kuralları taşır
+};
+// Artık bu anın hangi yerel saate denk geldiğini her zaman doğru hesaplayabilirsiniz.
+\`\`\`
+
+<div class="callout callout-warning">
+<strong>⚠️ Kural:</strong> Offset kaydetmek <em>o anın</em> fotoğrafıdır. Zone ID kaydetmek <em>o yerin kurallarını</em> saklamaktır. İkincisi olmadan, geçmiş veya gelecekteki herhangi bir an için doğru yerel saati hesaplayamazsınız.
+</div>
+
+### Gelecek Zaman: UTC Kuralının İstisnası
+
+"Global Kaydet, Yerel Görüntüle" kuralının bir istisnası var: **gelecek zamanlı kayıtlar.**
+
+Senaryo: Kullanıcı "Her Pazartesi saat 10:00 İstanbul'da toplantı" diyor. Bunu \`UTC 07:00\` olarak saklarsanız:
+
+- Türkiye yarın offset'ini değiştirirse (tekrar +2'ye dönse), toplantı yanlış saatte tetiklenir
+- Kullanıcının niyeti "duvar saati ile 10:00" idi — UTC değil
+
+| Zaman Türü | Nasıl Saklanmalı | Neden |
+|-----------|-----------------|-------|
+| Geçmiş olay (log, işlem) | UTC instant (\`Instant\` veya \`DateTimeOffset\`) | An sabit, asla değişmez |
+| Gelecek randevu | Yerel saat + IANA zone ID (\`LocalDateTime\` + \`DateTimeZone\`) | Kurallar değişebilir, anı son anda hesapla |
+| Tekrarlayan olay | Yerel saat + IANA zone ID + tekrar kuralı (RRULE) | Her tetiklemede güncel kurala göre UTC'ye çevir |
+
+\`\`\`csharp
+// NodaTime — gelecek randevu doğru yönetimi
+var zone = DateTimeZoneProviders.Tzdb["Europe/Istanbul"];
+var localMeeting = new LocalDateTime(2027, 3, 15, 10, 0); // "duvar saati 10:00"
+
+// Hatırlatma gönderirken: o anki kurala göre instant hesapla
+var zoned = localMeeting.InZoneLeniently(zone);
+var utcInstant = zoned.ToInstant(); // Şu anki kurala göre UTC
+
+// Eğer Türkiye 2027'de offset değiştirirse,
+// bu kod yeni kuralla doğru UTC'yi üretir — çünkü LocalDateTime sakladık.
+\`\`\`
+
+<div class="callout callout-info">
+<strong>💡 Özet:</strong> Geçmiş = instant (UTC) kaydet. Gelecek = yerel saat + zone ID kaydet, anı <em>tetikleme anında</em> hesapla. Bu ayrımı bilmeyen her sistem, DST veya offset değişikliği olduğunda hatalı bildirimler gönderir.
+</div>
+
+<p class="section-hook">UTC'ye dönüştürmek için güncel zaman dilimi bilgisine ihtiyacınız var. Ama bu bilgi nereden geliyor? Kim güncel tutuyor?</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">🗃️ Veritabanları — Kim Güncel Tutuyor?</span></div>
+
+## İki Veritabanı, İki Dünya
+
+Zaman dilimi bilgileri iki büyük veritabanında tutulur:
+
+| Veritabanı | Kim Yönetiyor | Format | Güncelleme |
+|-----------|--------------|--------|-----------|
+| Microsoft Windows TZ | Microsoft | Registry | Windows Update |
+| IANA/Olson (tzdata) | Topluluk + IANA | Text dosyaları | Yılda birkaç kez |
+
+Cross-platform uygulamalarda hangisini kullanacağınızı iyi düşünün. Microsoft zamanla IANA tanımlarını da dahil etti ve iki veritabanı arasında çeviri olanağı sağladı.
+
+### Microsoft'un Yaklaşımı
+
+Windows, zaman dilimlerini Registry'de tutar:
+
+\`\`\`
+HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones
+\`\`\`
+
+<div class="svg-illustration">
+<svg viewBox="0 0 580 220" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .db-text { font-family: 'Plus Jakarta Sans', sans-serif; fill: #3d3d3d; }
+    .db-mono { font-family: 'JetBrains Mono', monospace; fill: #3d3d3d; font-size: 9px; }
+    .db-box { fill: #f3f2ef; stroke: #d4d0ca; stroke-width: 1.5; rx: 8; }
+    .db-box-active { fill: rgba(37,99,235,0.05); stroke: #2563eb; stroke-width: 1.5; rx: 8; }
+    .db-badge { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 9px; font-weight: 600; }
+  </style>
+  <!-- Windows box -->
+  <rect x="20" y="10" width="250" height="200" class="db-box"/>
+  <text x="145" y="35" class="db-text" text-anchor="middle" font-size="11" font-weight="700">Microsoft Windows TZ</text>
+  <text x="145" y="52" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#8c8c8c" text-anchor="middle">Registry-based • Windows Update</text>
+  <!-- Registry entries -->
+  <rect x="35" y="65" width="220" height="20" rx="3" fill="#eae8e4"/>
+  <text x="42" y="79" class="db-mono">Turkey Standard Time</text>
+  <rect x="35" y="90" width="220" height="20" rx="3" fill="#eae8e4"/>
+  <text x="42" y="104" class="db-mono">Romance Standard Time</text>
+  <rect x="35" y="115" width="220" height="20" rx="3" fill="#eae8e4"/>
+  <text x="42" y="129" class="db-mono">E. Australia Standard Time</text>
+  <rect x="35" y="140" width="220" height="20" rx="3" fill="#eae8e4"/>
+  <text x="42" y="154" class="db-mono">Eastern Standard Time</text>
+  <!-- Pros/Cons -->
+  <text x="42" y="180" class="db-badge" fill="#16a34a">✓ Otomatik güncelleme</text>
+  <text x="42" y="195" class="db-badge" fill="#c2410c">✗ Kafa karıştıran isimler</text>
+  <!-- IANA box -->
+  <rect x="310" y="10" width="250" height="200" class="db-box-active"/>
+  <text x="435" y="35" class="db-text" text-anchor="middle" font-size="11" font-weight="700" fill="#2563eb">IANA / Olson (tzdata)</text>
+  <text x="435" y="52" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#8c8c8c" text-anchor="middle">Text files • Topluluk • 2026b</text>
+  <!-- IANA entries -->
+  <rect x="325" y="65" width="220" height="20" rx="3" fill="rgba(37,99,235,0.06)"/>
+  <text x="332" y="79" class="db-mono" fill="#2563eb">Europe/Istanbul</text>
+  <rect x="325" y="90" width="220" height="20" rx="3" fill="rgba(37,99,235,0.06)"/>
+  <text x="332" y="104" class="db-mono" fill="#2563eb">Europe/Paris</text>
+  <rect x="325" y="115" width="220" height="20" rx="3" fill="rgba(37,99,235,0.06)"/>
+  <text x="332" y="129" class="db-mono" fill="#2563eb">Australia/Sydney</text>
+  <rect x="325" y="140" width="220" height="20" rx="3" fill="rgba(37,99,235,0.06)"/>
+  <text x="332" y="154" class="db-mono" fill="#2563eb">America/New_York</text>
+  <!-- Pros/Cons -->
+  <text x="332" y="180" class="db-badge" fill="#16a34a">✓ Anlaşılır isimlendirme</text>
+  <text x="332" y="195" class="db-badge" fill="#16a34a">✓ Cross-platform standart</text>
+</svg>
+</div>
+<p class="svg-caption">İki veritabanı, iki yaklaşım — aynı gerçekliğin farklı isimleri</p>
+
+**Artıları:** Windows ile entegre, otomatik güncelleme, .NET üzerinden kolay erişim, 2016'dan itibaren tüm dünyayı kapsar.
+
+**Eksileri:** Standart kuruluş değil, geçmiş verileri tutarsız, aylık güncelleme, isimlendirme kafa karıştırıcı.
+
+İsimlendirme örnekleri — yaratıcı diyelim:
+- "Eastern Standard Time" — hem EST hem EDT'yi kapsıyor (yanıltıcı)
+- "US Mountain Standard Time" — Arizona'nın sabit MST'si için
+- "Romance Standard Time" — başka hiçbir veritabanında yok, Microsoft'a özgü
+- "AUS Eastern Standard Time" vs "E. Australia Standard Time" — sadece DST farkı
+- "Arab", "Arabian", "Arabic Standard Time" — üç farklı dilim, üç benzer isim
+
+### IANA: Endüstri Standardı
+
+IANA veritabanı (ZoneInfo, TZDB, TZ Database), Linux, macOS, Java, PHP ve modern .NET'te kullanılır. Format: \`Bölge/Şehir\` — \`Europe/Istanbul\`.
+
+<div class="callout callout-info">
+<strong>📌 Güncel sürüm:</strong> IANA Time Zone Database <strong>2026b</strong> (22 Nisan 2026)
+</div>
+
+**Artıları:** Geniş platform desteği, anlaşılır isimlendirme, tarihsel veri, RFC'lerde referans, topluluk sürdürür.
+
+**Eksileri:** Birçok uygulama manuel güncelleme gerektirir, çok sayıda dilim UX'te liste sunmayı zorlaştırır.
+
+<div class="svg-illustration">
+<svg viewBox="0 0 630 170" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .pl-text { font-family: 'Plus Jakarta Sans', sans-serif; fill: #3d3d3d; }
+    .pl-icon-box { fill: #f3f2ef; stroke: #d4d0ca; stroke-width: 1.5; rx: 10; }
+    .pl-connector { stroke: #d4d0ca; stroke-width: 1.5; fill: none; marker-end: url(#arrowPL); }
+  </style>
+  <defs>
+    <marker id="arrowPL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10" fill="#d4d0ca"/></marker>
+  </defs>
+  <!-- Platform icons -->
+  <!-- Linux -->
+  <rect x="20" y="30" width="100" height="100" class="pl-icon-box"/>
+  <text x="70" y="65" class="pl-text" text-anchor="middle" font-size="22">🐧</text>
+  <text x="70" y="88" class="pl-text" text-anchor="middle" font-size="10" font-weight="600">Linux</text>
+  <text x="70" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#2563eb" text-anchor="middle">IANA</text>
+  <!-- macOS -->
+  <rect x="140" y="30" width="100" height="100" class="pl-icon-box"/>
+  <text x="190" y="65" class="pl-text" text-anchor="middle" font-size="22">🍎</text>
+  <text x="190" y="88" class="pl-text" text-anchor="middle" font-size="10" font-weight="600">macOS</text>
+  <text x="190" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#2563eb" text-anchor="middle">IANA</text>
+  <!-- Windows -->
+  <rect x="260" y="30" width="100" height="100" class="pl-icon-box"/>
+  <text x="310" y="65" class="pl-text" text-anchor="middle" font-size="22">🪟</text>
+  <text x="310" y="88" class="pl-text" text-anchor="middle" font-size="10" font-weight="600">Windows</text>
+  <text x="310" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#8c8c8c" text-anchor="middle">MS TZ + IANA</text>
+  <!-- Java -->
+  <rect x="380" y="30" width="70" height="100" class="pl-icon-box"/>
+  <text x="415" y="65" class="pl-text" text-anchor="middle" font-size="22">☕</text>
+  <text x="415" y="88" class="pl-text" text-anchor="middle" font-size="10" font-weight="600">Java</text>
+  <text x="415" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#2563eb" text-anchor="middle">IANA*</text>
+  <!-- .NET -->
+  <rect x="460" y="30" width="70" height="100" class="pl-icon-box"/>
+  <text x="495" y="65" class="pl-text" text-anchor="middle" font-size="22">🟣</text>
+  <text x="495" y="88" class="pl-text" text-anchor="middle" font-size="10" font-weight="600">.NET</text>
+  <text x="495" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#8c8c8c" text-anchor="middle">OS'a bağlı</text>
+  <!-- Database -->
+  <rect x="540" y="30" width="70" height="100" class="pl-icon-box"/>
+  <text x="575" y="65" class="pl-text" text-anchor="middle" font-size="22">🗄️</text>
+  <text x="575" y="88" class="pl-text" text-anchor="middle" font-size="10" font-weight="600">DB</text>
+  <text x="575" y="105" font-family="JetBrains Mono, monospace" font-size="8" fill="#8c8c8c" text-anchor="middle">Değişir**</text>
+  <!-- Bottom label -->
+  <text x="310" y="148" class="pl-text" text-anchor="middle" font-size="8.5" fill="#8c8c8c">* Java: JRE kendi tzdata kopyasını taşır (JDK güncelle) • .NET: Windows→Registry, Linux→/usr/share/zoneinfo</text>
+  <text x="310" y="160" class="pl-text" text-anchor="middle" font-size="8.5" fill="#8c8c8c">** PostgreSQL: IANA • SQL Server: Windows Registry (host OS'a bağlı)</text>
+</svg>
+</div>
+
+<p class="section-hook">Bu tablo temiz görünüyor. Ama gerçek dünyada "her iki veritabanını da destekliyoruz" demek yetmiyor...</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">⚡ Platform Gerçekleri — Kağıt Üzerinde vs Üretim</span></div>
+
+## Çağımızın Derdi: "Çözdük" Dedikleri Sorunlar
+
+Yukarıdaki tablo basit görünüyor: ".NET 6 her ikisini de destekliyor, sorun bitti." Gerçek bundan daha karanlık.
+
+**.NET 6+ ve ICU Eşlemesi: Yarım Çözüm**
+
+.NET 6'dan itibaren \`FindSystemTimeZoneById("Europe/Istanbul")\` Windows'ta da çalışıyor. Ama bu bir *çeviri*dir — altta hâlâ Windows Registry'deki zaman dilimi verisini kullanır. Eğer Windows Update yapılmamışsa veya eski bir Server image'ı üzerindeyseniz:
+
+- Türkiye 2016'da DST'yi kaldırdı → güncellenmemiş sunucu hâlâ yaz/kış geçişi uygular
+- Rusya 2014'te dilim değiştirdi → eski patch'siz makinelerde yanlış offset döner
+- Mısır, Fas, Şili gibi sık kural değiştiren ülkeler için aynı risk geçerli
+
+\`\`\`csharp
+// .NET 6+ — her platformda çalışır (ICU mapping)
+var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul");
+
+// AMA: Bu veri nereye dayanıyor?
+// Windows → Registry (Windows Update'e bağlı)
+// Linux   → /usr/share/zoneinfo (tzdata paketine bağlı)
+// Docker  → Container image'ındaki tzdata versiyonuna bağlı
+\`\`\`
+
+**SQL Server: En Zayıf Halka**
+
+SQL Server'ın \`AT TIME ZONE\` komutu doğrudan Windows Registry'yi okur:
+
+\`\`\`sql
+-- SQL Server: her zaman Windows TZ ID bekler
+SELECT GETUTCDATE() AT TIME ZONE 'Turkey Standard Time';
+
+-- Bu komutun doğru sonuç vermesi için:
+-- 1. Host OS'un güncel Windows Update almış olması
+-- 2. Registry'deki TZ verisinin doğru olması
+-- 3. IANA ID desteklenmez (2026 itibarıyla hâlâ)
+\`\`\`
+
+Senaryo: Bir Windows Server 2019 üzerinde koşan SQL Server 2019. Sunucu "kararlı" diye patch uygulanmıyor. 2024'te Kazakistan iki dilimden tek dilime geçiyor — ama sizin sunucu bunu bilmiyor. O andan itibaren Kazakistan'daki müşterilerinizin işlem saatleri 1 saat kayık.
+
+**Docker ve Cloud: Görünmez Tehlike**
+
+\`\`\`dockerfile
+# Alpine tabanlı .NET image — tzdata yüklü gelmez!
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+# TimeZoneInfo.FindSystemTimeZoneById → TimeZoneNotFoundException
+
+# Çözüm: tzdata paketini kendiniz ekleyin
+RUN apk add --no-cache tzdata
+\`\`\`
+
+Cloud VM'lerde ve container'larda tzdata versiyonunun ne olduğu çoğu zaman kimsenin aklına gelmez — ta ki bir müşteri "saatler yanlış" diyene kadar.
+
+<div class="callout callout-warning">
+<strong>⚠️ Pratik sonuç:</strong> .NET 6'nın IANA desteği bir <em>API kolaylığı</em>dır, <em>veri doğruluğu garantisi</em> değildir. Doğruluk, alttaki OS/container'ın zaman dilimi verisinin güncelliğine bağlıdır. CI/CD pipeline'ınızda tzdata versiyonunu kontrol edin.
+</div>
+
+**Ne Yapmalı?**
+
+| Katman | Risk | Önlem |
+|--------|------|-------|
+| .NET API sunucusu | OS tzdata eski | Windows Update politikasını zorunlu kıl, Docker'da tzdata pinle |
+| SQL Server | Registry eski, IANA desteksiz | Tarih/saati UTC olarak sakla, dönüşümü uygulama katmanında yap |
+| Frontend (JS) | Kullanıcının cihazındaki IANA verisi eski | \`Intl\` API'si runtime'a bağlı — kritik hesaplamaları backend'de yap |
+| Mobil | OS güncellenmemiş | Aynı strateji — UTC sakla, yerel göster |
+
+Kendi sisteminizde sadece şu üç format kullanın:
+
+| # | Format | Örnek |
+|---|--------|-------|
+| 1 | IANA tanımlayıcısı | \`Europe/Istanbul\` |
+| 2 | Microsoft tanımlayıcısı | \`Turkey Standard Time\` |
+| 3 | UTC Offset | \`UTC+03:00\` |
+
+Kısaltma **asla** kullanmayın. Tüm kısaltma listesi: [Wikipedia](https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations)
+
+<p class="section-hook">Peki bu riskleri production'a çıkmadan önce nasıl yakalarsınız?</p>
+
+---
+
+<div class="era-marker"><span class="era-badge">🧪 Test — Güvenlik Ağı</span></div>
+
+## Test ve CI/CD Stratejisi
+
+Zaman dilimi hataları sinsidir — çoğu zaman yalnızca belirli tarihlerde, belirli ülkelerdeki kullanıcılar için ortaya çıkar. Bunları yakalamak için sistematik bir test stratejisi şart.
+
+### tzdata Versiyonunu CI'da Kontrol Etme
+
+\`\`\`bash
+# Linux/Docker — tzdata versiyonunu kontrol et
+cat /usr/share/zoneinfo/tzdata.zi | head -1
+# veya
+dpkg -s tzdata | grep Version   # Debian/Ubuntu
+apk info tzdata                  # Alpine
+
+# Beklenen minimum versiyon kontrolü (CI script)
+EXPECTED="2026b"
+ACTUAL=$(cat /usr/share/zoneinfo/tzdata.zi | head -1 | grep -oP '\\d{4}[a-z]')
+if [[ "$ACTUAL" < "$EXPECTED" ]]; then
+  echo "⚠️ tzdata eski: $ACTUAL (beklenen: >= $EXPECTED)"
+  exit 1
+fi
+\`\`\`
+
+### DST Geçiş Anlarını Test Etme
+
+\`\`\`csharp
+// xUnit — DST sınır koşulları
+[Theory]
+[InlineData("2024-03-31T01:59:00+01:00", "Europe/Berlin", "2024-03-31T02:59:00+02:00")]
+[InlineData("2024-10-27T02:30:00+02:00", "Europe/Berlin", "2024-10-27T02:30:00+01:00")]
+public void DstTransition_ShouldResolveCorrectly(string input, string tzId, string expected)
+{
+    var dto = DateTimeOffset.Parse(input);
+    var tz = TimeZoneInfo.FindSystemTimeZoneById(tzId);
+    var converted = TimeZoneInfo.ConvertTime(dto, tz);
+    Assert.Equal(DateTimeOffset.Parse(expected), converted);
+}
+
+// Belirli ülke kurallarını doğrula
+[Fact]
+public void Turkey_HasNoDst_Since2016()
+{
+    var tz = TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul");
+    var summer = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.FromHours(3));
+    var winter = new DateTimeOffset(2026, 12, 15, 12, 0, 0, TimeSpan.FromHours(3));
+
+    // Türkiye'de yaz-kış farkı olmamalı
+    Assert.Equal(summer.Offset, winter.Offset);
+}
+\`\`\`
+
+### Docker Image'ında tzdata Pinleme
+
+\`\`\`dockerfile
+# Dockerfile — tzdata versiyonunu sabitle
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+
+# tzdata'yı belirli versiyonda yükle
+RUN apk add --no-cache tzdata~=2026
+
+# Health check'e tzdata versiyonu ekle
+HEALTHCHECK CMD test -f /usr/share/zoneinfo/tzdata.zi
+\`\`\`
+
+### NodaTime ile Bağımsız Test
+
+\`\`\`csharp
+// NodaTime — OS'tan bağımsız, kendi TZDB ile test
+var tzdb = DateTimeZoneProviders.Tzdb; // NuGet paketindeki versiyon
+var zone = tzdb["Asia/Almaty"];
+
+// Kazakistan 2024'te tek dilime geçti — bunu doğrula
+var beforeChange = Instant.FromUtc(2024, 2, 29, 12, 0);
+var afterChange = Instant.FromUtc(2024, 3, 1, 12, 0);
+
+Assert.Equal(Offset.FromHours(6), zone.GetUtcOffset(beforeChange));
+Assert.Equal(Offset.FromHours(5), zone.GetUtcOffset(afterChange));
+\`\`\`
+
+<div class="callout callout-info">
+<strong>💡 Tavsiye:</strong> CI pipeline'ınıza haftalık bir "tzdata freshness check" ekleyin. IANA'nın <a href="https://data.iana.org/time-zones/releases/">releases sayfasını</a> RSS ile takip edin. Yeni bir release çıktığında (yılda 3-5 kez) container image'larınızı rebuild edin.
+</div>
+
+---
+
+<div class="era-marker"><span class="era-badge">📚 Kaynaklar</span></div>
+
+## Kaynaklar
+
+- [IANA Time Zone Database](https://www.iana.org/time-zones) — Güncel: 2026b
+- [ISO 8601 (Wikipedia)](https://en.wikipedia.org/wiki/ISO_8601)
+- [timeanddate.com](https://www.timeanddate.com/time/zones/)
+- [CGPM Resolution 4 (2022)](https://www.bipm.org/en/cgpm-2022/resolution-4) — Leap second kararı
+- [Windows TZ Updates](https://techcommunity.microsoft.com/t5/daylight-saving-time-time-zone/bg-p/DSTBlog)
+- [TZ Kısaltmaları (Wikipedia)](https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations)
+
+<footer class="article-footer">
+İlk yayın: Temmuz 2024 · Son güncelleme: Mayıs 2026 · <a href="https://github.com/Oxara">Erdem Özkara</a>
+</footer>
+`;
+
+    // Heading ID renderer for ToC navigation
+    const renderer = new marked.Renderer();
+    renderer.heading = function(text, level) {
+        const raw = typeof text === 'object' ? text.text : text;
+        const lev = typeof text === 'object' ? text.depth : level;
+        const slug = raw.toLowerCase()
+            .replace(/<[^>]+>/g, '')
+            .replace(/ı/g, 'i').replace(/İ/g, 'i')
+            .replace(/ğ/g, 'g').replace(/ü/g, 'u')
+            .replace(/ş/g, 's').replace(/ö/g, 'o')
+            .replace(/ç/g, 'c').replace(/Ğ/g, 'g')
+            .replace(/Ü/g, 'u').replace(/Ş/g, 's')
+            .replace(/Ö/g, 'o').replace(/Ç/g, 'c')
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .trim();
+        return '<h' + lev + ' id="' + slug + '">' + raw + '</h' + lev + '>';
+    };
+    marked.setOptions({ renderer: renderer });
+
+    // Render
+    document.getElementById('article').innerHTML = marked.parse(MARKDOWN_CONTENT);
+
+    // Progress bar + back to top
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+        document.getElementById('progressBar').style.transform = 'scaleX(' + progress + ')';
+        document.getElementById('backToTop').classList.toggle('visible', scrollTop > 600);
+    });
+    </script>
+
+    <!-- GoatCounter -->
+    <script data-goatcounter="https://oxara.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
