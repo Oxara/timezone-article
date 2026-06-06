@@ -1,52 +1,31 @@
-<p align="center"><a href="https://oxara.github.io/timezone-article/"><img src="og-image.svg" width="100%" /></a></p>
+<p align="center"><a href="https://oxara.github.io/timezone-article/"><img src="og-image.svg" width="100%" alt="Uluslararası Zaman Yönetimi" /></a></p>
 
-# Uluslararası Zaman Yönetimi: Zaman Dilimleri ve Uygulamaları
+# Uluslararası Zaman Yönetimi
 
-> Zaman dilimleri, UTC, GMT, DST, IANA veritabanı ve ISO 8601 hakkında kapsamlı Türkçe rehber.
+Zaman dilimleri, UTC, GMT, DST, IANA veritabanı ve ISO 8601 hakkında Türkçe teknik makale.
 
-🔗 **Canlı Site:** [oxara.github.io/timezone-article](https://oxara.github.io/timezone-article/)
+**Canlı site:** https://oxara.github.io/timezone-article/
 
----
+## Yapı
 
-## 📊 İçerik
+- `index.html`: Statik ve semantik makale içeriği
+- `features/base`: Ortak doküman düzeni ve temel bileşenler
+- `features/theme`: Açık/koyu tema
+- `features/sidemenu`: Başlıklardan üretilen yan menü
+- `features/search`: Sayfa içi arama
+- `features/reading-progress`: Okuma ilerleme göstergesi
+- `features/scroll-top`: Başa dönme kontrolü
+- `features/code-highlight`: Kod renklendirme
+- `features/copy-code`: Kod bloklarını kopyalama
+- `og-image.svg`: Sosyal paylaşım önizleme görseli
+- `robots.txt` ve `sitemap.xml`: Arama motoru keşfi
 
-| Metrik | Değer |
-|--------|-------|
-| Bölüm sayısı | 11 |
-| Görsel | 8 |
-| Okuma süresi | ~18 dk |
-| Son güncelleme | Mayıs 2026 |
-| IANA sürümü | 2026b |
+Makale Markdown veya istemci tarafı bir renderer kullanmaz. İçerik doğrudan HTML olarak yayınlanır ve harici framework gerektirmez.
 
-## 📋 Kapsanan Konular
+## Yerel Kullanım
 
-| Konu | Seviye |
-|------|--------|
-| Zaman Dilimleri Nedir? | 🟢 Temel |
-| GMT ve Meridyen Sistemi | 🟢 Temel |
-| Politik Saat Kararları (Türkiye kronolojisi) | 🟡 Orta |
-| UTC, TAI, UT1 İlişkisi | 🟡 Orta |
-| Leap Second ve CGPM 2035 Kararı | 🟠 İleri |
-| Yaz Saati (DST) ve AB Tartışması | 🟡 Orta |
-| Yaygın Yanılgılar | 🟡 Orta |
-| Global Kaydet / Yerel Görüntüle Prensibi | 🟠 İleri |
-| Microsoft vs IANA Veritabanları | 🟠 İleri |
-| ISO 8601 Format Standardı | 🟡 Orta |
-| Gelecek: 2035 ve Ötesi | 🟡 Orta |
+`index.html` doğrudan tarayıcıda açılabilir. Göreli `features/` yollarının korunması yeterlidir.
 
-## ✨ Özellikler
-
-- 📱 Responsive makale düzeni (mobile-first)
-- 🌙 Dark tema
-- 📊 Okuma ilerleme çubuğu
-- 🔝 Başa dön butonu
-- 🖨️ Print-optimized
-- 📈 GoatCounter analytics
-
-## 🛠️ Teknoloji
-
-Tek dosya HTML — harici framework yok. İçerik JavaScript template literal içinde Markdown olarak tutulur, [marked.js](https://github.com/markedjs/marked) ile render edilir.
-
-## 📄 Lisans
+## Lisans
 
 MIT

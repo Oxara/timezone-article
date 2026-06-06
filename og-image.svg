@@ -22,22 +22,9 @@
   <!-- Subtitle -->
   <text x="600" y="370" font-family="Inter, system-ui, sans-serif" font-size="24" fill="#9ca3b4" text-anchor="middle">Zaman Dilimleri, UTC, IANA ve ISO 8601 Rehberi</text>
   
-  <!-- Stats -->
-  <text x="600" y="430" font-family="Inter, system-ui, sans-serif" font-size="18" fill="#3B82F6" text-anchor="middle">11 Bölüm · 8 Görsel · ~18 dk okuma</text>
-  
-  <!-- Level badges -->
-  <rect x="390" y="460" width="80" height="26" rx="13" fill="#34d399" opacity="0.2"/>
-  <text x="430" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#34d399" text-anchor="middle">Temel</text>
-  
-  <rect x="490" y="460" width="80" height="26" rx="13" fill="#fb923c" opacity="0.2"/>
-  <text x="530" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#fb923c" text-anchor="middle">Orta</text>
-  
-  <rect x="590" y="460" width="80" height="26" rx="13" fill="#3B82F6" opacity="0.2"/>
-  <text x="630" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#3B82F6" text-anchor="middle">İleri</text>
-  
-  <rect x="690" y="460" width="80" height="26" rx="13" fill="#c76a6a" opacity="0.2"/>
-  <text x="730" y="478" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#c76a6a" text-anchor="middle">Uzman</text>
+  <!-- Article scope -->
+  <text x="600" y="430" font-family="Inter, system-ui, sans-serif" font-size="18" fill="#3B82F6" text-anchor="middle">UTC · IANA · ISO 8601 · Yazılım Uygulamaları</text>
   
   <!-- Footer -->
-  <text x="600" y="560" font-family="Inter, system-ui, sans-serif" font-size="16" fill="#6b7280" text-anchor="middle">oxara.github.io/timezone-handbook</text>
+  <text x="600" y="540" font-family="Inter, system-ui, sans-serif" font-size="16" fill="#6b7280" text-anchor="middle">oxara.github.io/timezone-article</text>
 </svg>
