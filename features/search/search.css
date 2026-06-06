@@ -1,0 +1,202 @@
+/* ============================================================
+   SEARCH.CSS — Ctrl+K arama modalı ve header arama butonu
+   Bağımlılık: base.css
+   ============================================================ */
+
+/* ── Header aksiyon grubu (tema + arama butonları birlikte) ── */
+/* ── Arama tetik butonu ── */
+.search-trigger {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+}
+
+.search-trigger:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+}
+
+.search-trigger svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+.search-trigger kbd {
+    font-size: 0.7rem;
+    background: var(--surface-2);
+    padding: 0.1rem 0.35rem;
+    border-radius: 6px;
+    font-family: monospace;
+}
+
+/* ── Modal overlay ── */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+}
+
+.search-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ── Modal kutu ── */
+.search-modal {
+    max-width: 700px;
+    width: 90%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    animation: search-slide-down 0.2s ease;
+}
+
+@keyframes search-slide-down {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Input alanı ── */
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.search-input-wrapper svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text-muted);
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+}
+
+.search-input::placeholder { color: var(--text-dim); }
+
+.search-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0 8px;
+    line-height: 1;
+    border-radius: 8px;
+    transition: all 0.15s;
+}
+
+.search-close:hover { background: var(--surface-2); color: var(--text); }
+
+/* ── Sonuç listesi ── */
+.search-results {
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+.search-result-item {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s ease;
+}
+
+.search-result-item:hover,
+.search-result-item.selected { background: var(--surface-2); }
+
+.search-result-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--brand);
+    margin-bottom: 0.25rem;
+}
+
+.search-result-section {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.search-result-content {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-result-content mark {
+    background: #fbbf24;
+    color: #1a1a2e;
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+[data-theme="dark"] .search-result-content mark {
+    background: #f59e0b;
+    color: #0f0f1a;
+}
+
+.search-no-results {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .search-trigger span:not(kbd),
+    .search-trigger kbd { display: none; }
+
+    .search-trigger {
+        padding: 0.35rem 0.7rem;
+    }
+
+    .search-trigger svg {
+        width: 14px;
+        height: 14px;
+        margin: 0;
+    }
+}

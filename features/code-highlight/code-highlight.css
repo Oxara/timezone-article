@@ -1,0 +1,46 @@
+/* ============================================================
+   CODE-HIGHLIGHT.CSS — pre/code blokları ve syntax token renkleri
+   Bağımlılık: base.css (--code-* değişkenleri)
+   ============================================================ */
+
+pre {
+    position: relative;
+    background: var(--code-surface);
+    border: 1px solid var(--code-border);
+    border-radius: 8px;
+    padding: 1.1rem 4.8rem 1.1rem 1.4rem;
+    overflow: auto;
+    margin: 1rem 0 1.5rem;
+    font-size: .82rem;
+    line-height: 1.65;
+    box-shadow: var(--shadow);
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--surface);
+}
+
+pre::-webkit-scrollbar-thumb { border-color: var(--surface); }
+pre::-webkit-scrollbar-track  { background: var(--surface); }
+pre::-webkit-scrollbar-corner { background: var(--surface); }
+
+pre::before, pre::after { display: none; }
+
+pre code {
+    display: block;
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    font-size: inherit;
+    white-space: pre;
+    tab-size: 4;
+}
+
+/* ── Syntax tokens ── */
+.code-token.tag         { color: var(--code-tag); }
+.code-token.attr        { color: var(--code-attr); }
+.code-token.string      { color: var(--code-string); }
+.code-token.number      { color: var(--code-number); }
+.code-token.keyword     { color: var(--code-keyword); }
+.code-token.comment     { color: var(--code-comment); font-style: italic; }
+.code-token.punctuation { color: var(--code-punctuation); }
