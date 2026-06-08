@@ -6,26 +6,31 @@ Zaman dilimleri, UTC, GMT, DST, IANA veritabanı ve ISO 8601 hakkında Türkçe 
 
 **Canlı site:** https://oxara.github.io/timezone-article/
 
-## Yapı
+## Makalenin kapsamı
+
+- UTC ve GMT arasındaki fark
+- IANA zaman dilimi veritabanı ve bölge kimlikleri
+- Yaz saati uygulamasının tarihsel kuralları
+- ISO 8601 tarih ve saat gösterimleri
+- Uygulama, veritabanı ve API katmanlarında güvenli zaman yönetimi
+
+## Teknik yapı
 
 - `index.html`: Statik ve semantik makale içeriği
-- `features/base`: Ortak doküman düzeni ve temel bileşenler
-- `features/theme`: Açık/koyu tema
-- `features/sidemenu`: Başlıklardan üretilen yan menü
-- `features/search`: Sayfa içi arama
-- `features/reading-progress`: Okuma ilerleme göstergesi
-- `features/scroll-top`: Başa dönme kontrolü
-- `features/code-highlight`: Kod renklendirme
-- `features/copy-code`: Kod bloklarını kopyalama
 - `og-image.svg`: Sosyal paylaşım önizleme görseli
 - `robots.txt` ve `sitemap.xml`: Arama motoru keşfi
+- `LICENSE`: MIT lisans metni
 
-Makale Markdown veya istemci tarafı bir renderer kullanmaz. İçerik doğrudan HTML olarak yayınlanır ve harici framework gerektirmez.
+Arayüz özellikleri
+[Oxara.DocumentTemplate](https://github.com/Oxara/Oxara.DocumentTemplate)
+`v1.0.0` sürümünden jsDelivr üzerinden kullanılır. Makale Markdown'a
+dönüştürülmez ve istemci tarafı bir içerik renderer'ına ihtiyaç duymaz.
 
-## Yerel Kullanım
+## Yerel kullanım
 
-`index.html` doğrudan tarayıcıda açılabilir. Göreli `features/` yollarının korunması yeterlidir.
+`index.html` doğrudan tarayıcıda açılabilir. Ortak CSS ve JavaScript dosyaları
+CDN üzerinden yüklendiği için internet bağlantısı gerekir.
 
 ## Lisans
 
-MIT
+[MIT](LICENSE)
